@@ -38,3 +38,6 @@ export const getTotal = (items = [], discount = 0) => {
   const total = items.reduce((acc, { price, quantity }) => acc + price * quantity, 0)
   return total * (1 - discount / 100)
 }
+
+
+console.log("Hello, world!");

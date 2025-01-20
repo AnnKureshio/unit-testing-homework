@@ -94,3 +94,11 @@ describe('getTotal function', () => {
     expect(result).toBe(expected)
   })
 })
+
+describe('Simple test', () => {
+  it('should display Hello, world!', () => {
+    console.log = jest.fn(); // Подменяем console.log
+    require('./app'); // Подключаем app.js, чтобы вызвался console.log
+    expect(console.log).toHaveBeenCalledWith('Hello, world!');
+  });
+});
