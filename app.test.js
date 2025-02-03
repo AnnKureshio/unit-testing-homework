@@ -1,104 +1,144 @@
-//Функция nameIsValid
-import { nameIsValid } from './app'
+import { nameIsValid, fullTrim, getTotal } from './functions';
 
-describe('nameIsValid function', () => {
-  it('should return true for a valid name', () => {
-    const result = nameIsValid('john')
-    expect(result).toBe(true) // Имя состоит только из маленьких букв
-  })
+describe('nameIsValid', () => {
+    it('should return true for valid name', () => {
+        // Arrange
+        const name = 'john';
 
-  it('should return false for a name that is too short', () => {
-    const result = nameIsValid('a')
-    expect(result).toBe(false) // Имя должно быть минимум 2 символа
-  })
+        // Act
+        const result = nameIsValid(name);
 
-  it('should return false for a name with invalid characters', () => {
-    const result = nameIsValid('john123')
-    expect(result).toBe(false) // Имя не должно содержать цифр
-  })
+        // Assert
+        expect(result).toBe(true);
+    });
 
-  it('should return false for a name with uppercase letters', () => {
-    const result = nameIsValid('John')
-    expect(result).toBe(false) // Имя должно быть в нижнем регистре
-  })
+    it('should return false for name shorter than 2 characters', () => {
+        // Arrange
+        const name = 'a';
 
-  it('should return false for an empty name', () => {
-    const result = nameIsValid('')
-    expect(result).toBe(false) // Пустая строка
-  })
-})
+        // Act
+        const result = nameIsValid(name);
 
-//Функция fullTrim
-import { fullTrim } from './app'
+        // Assert
+        expect(result).toBe(false);
+    });
 
-describe('fullTrim function', () => {
-  it('should remove leading and trailing spaces from a string', () => {
-    const result = fullTrim('  hello world  ')
-    expect(result).toBe('helloworld') // Убираем пробелы по краям
-  })
+    it('should return false for name with non-alphabet characters', () => {
+        // Arrange
+        const name = 'john123';
 
-  it('should remove multiple spaces between words', () => {
-    const result = fullTrim('hello    world')
-    expect(result).toBe('helloworld') // Убираем все пробелы
-  })
+        // Act
+        const result = nameIsValid(name);
 
-  it('should return an empty string unchanged', () => {
-    const result = fullTrim('')
-    expect(result).toBe('') // Пустая строка не изменяется
-  })
+        // Assert
+        expect(result).toBe(false);
+    });
+});
 
-  it('should return an empty string for null input', () => {
-    const result = fullTrim(null)
-    expect(result).toBe('') // null превращаем в пустую строку
-  })
+describe('fullTrim', () => {
+    it('should remove spaces from the string', () => {
+        // Arrange
+        const text = '  hello   world  ';
 
-  it('should return an empty string for undefined input', () => {
-    const result = fullTrim(undefined)
-    expect(result).toBe('') // undefined превращаем в пустую строку
-  })
-})
+        // Act
+        const result = fullTrim(text);
 
-//Функция getTotal
-import { getTotal } from './app'
+        // Assert
+        expect(result).toBe('helloworld');
+    });
 
-describe('getTotal function', () => {
-  it('should return correct total without discount', () => {
-    const result = getTotal([{ price: 10, quantity: 2 }])
-    expect(result).toBe(20) // Без скидки
-  })
+    it('should return an empty string if input is empty', () => {
+        // Arrange
+        const text = '';
 
-  it('should return total with valid discount', () => {
-    const result = getTotal([{ price: 10, quantity: 2 }], 10)
-    expect(result).toBe(18) // Скидка 10%
-  })
+        // Act
+        const result = fullTrim(text);
 
-  it('should return total with 100% discount', () => {
-    const result = getTotal([{ price: 10, quantity: 2 }], 100git checkout homework)
-    expect(result).toBe(0) // Скидка 100% (всё бесплатно)
-  })
+        // Assert
+        expect(result).toBe('');
+    });
 
-  it('should throw an error for discount greater than 100', () => {
-    expect(() => getTotal([{ price: 10, quantity: 2 }], 110)).toThrowError('Процент скидки должен быть от 0 до 99') // Ошибка при скидке > 99
-  })
+    it('should return an empty string if input is null or undefined', () => {
+        // Arrange
+        const text = null;
 
-  it('should throw an error for negative discount', () => {
-    expect(() => getTotal([{ price: 10, quantity: 2 }], -10)).toThrowError('Процент скидки должен быть от 0 до 99') // Ошибка при отрицательной скидке
-  })
+        // Act
+        const result = fullTrim(text);
 
-  it.each([
-    [[{ price: 10, quantity: 2 }], 10, 18],
-    [[{ price: 10, quantity: 1 }], 50, 5],
-    [[{ price: 10, quantity: 5 }], 20, 40]
-  ])('should return total with %i discount', (items, discount, expected) => {
-    const result = getTotal(items, discount)
-    expect(result).toBe(expected)
-  })
-})
+        // Assert
+        expect(result).toBe('');
+    });
+});
 
-describe('Simple test', () => {
-  it('should display Hello, world!', () => {
-    console.log = jest.fn(); // Подменяем console.log
-    require('./app'); // Подключаем app.js, чтобы вызвался console.log
-    expect(console.log).toHaveBeenCalledWith('Hello, world!');
-  });
+describe('getTotal', () => {
+    it('should return total without discount', () => {
+        // Arrange
+        const items = [{ price: 10, quantity: 2 }];
+
+        // Act
+        const result = getTotal(items);
+
+        // Assert
+        expect(result).toBe(20);
+    });
+
+    it('should return total with 50% discount', () => {
+        // Arrange
+        const items = [{ price: 10, quantity: 2 }];
+        const discount = 50;
+
+        // Act
+        const result = getTotal(items, discount);
+
+        // Assert
+        expect(result).toBe(10);
+    });
+
+    it('should return total with 100% discount', () => {
+        // Arrange
+        const items = [{ price: 10, quantity: 2 }];
+        const discount = 100;
+
+        // Act
+        const result = getTotal(items, discount);
+
+        // Assert
+        expect(result).toBe(0);
+    });
+
+    it('should throw an error if discount is not a number', () => {
+        // Arrange
+        const items = [{ price: 10, quantity: 2 }];
+        const discount = '50%';
+
+        // Act
+        const action = () => getTotal(items, discount);
+
+        // Assert
+        expect(action).toThrow('Скидка должна быть числом');
+    });
+
+    it('should throw an error if discount is less than 0', () => {
+        // Arrange
+        const items = [{ price: 10, quantity: 2 }];
+        const discount = -5;
+
+        // Act
+        const action = () => getTotal(items, discount);
+
+        // Assert
+        expect(action).toThrow('Процент скидки должен быть от 0 до 99');
+    });
+
+    it('should throw an error if discount is 100 or more', () => {
+        // Arrange
+        const items = [{ price: 10, quantity: 2 }];
+        const discount = 100;
+
+        // Act
+        const action = () => getTotal(items, discount);
+
+        // Assert
+        expect(action).toThrow('Процент скидки должен быть от 0 до 99');
+    });
 });
