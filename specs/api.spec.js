@@ -11,7 +11,7 @@ const existingUser = {
 
 describe('Bookstore API - User and Token Tests', () => {
 
-    // Тест на ошибку при создании пользователя с уже существующим логином
+    // Тест на git log --oneline при создании пользователя с уже существующим логином.
     test('Should return error when creating a user with an existing username', async () => {
         await axios.post(`${BASE_URL}${USER_ENDPOINT}`, existingUser).catch(() => {});
         const response = await axios.post(`${BASE_URL}${USER_ENDPOINT}`, existingUser).catch(error => error.response);
@@ -20,7 +20,7 @@ describe('Bookstore API - User and Token Tests', () => {
         expect(response.data.message).toBe('User exists!');
     });
 
-    // Тест на ошибку при создании пользователя с неправильным паролем
+    // Тест на ошибку при создании пользователя с неправильным паролем.
     test('Should return error when creating a user with an invalid password', async () => {
         const invalidUser = {
             userName: 'newuser',
@@ -31,7 +31,7 @@ describe('Bookstore API - User and Token Tests', () => {
         expect(response.data.message).toContain('Passwords must have');
     });
 
-    // Тест на успешное создание нового пользователя
+    // Тест на успешное создание нового пользователя.
     test('Should successfully create a new user', async () => {
         const newUser = {
             userName: `user_${Date.now()}`,
@@ -42,7 +42,7 @@ describe('Bookstore API - User and Token Tests', () => {
         expect(response.data.username).toBe(newUser.userName);
     });
 
-    // Тест на ошибку при генерации токена с некорректными данными
+    // Тест на ошибку при генерации токена с некорректными данными.
     test('Should return error when generating a token with incorrect credentials', async () => {
         const invalidCredentials = {
             userName: 'nonexistentuser',
@@ -54,7 +54,7 @@ describe('Bookstore API - User and Token Tests', () => {
         expect(response.data.status).toBe('Failed');
     });
 
-    // Тест на успешную генерацию токена
+    // Тест на успешную генерацию токена.
     test('Should successfully generate a token', async () => {
         const response = await axios.post(`${BASE_URL}${TOKEN_ENDPOINT}`, existingUser);
         expect(response.status).toBe(200);
